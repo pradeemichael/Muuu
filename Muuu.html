@@ -1,0 +1,253 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>For You — A Little Surprise</title>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;500;700;900&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --bg:#0f0b1a;
+      --card:#111018;
+      --accent:#ff5c8a;
+      --muted: #cfc8d6;
+    }
+    html,body{height:100%;margin:0;font-family:Montserrat,system-ui,Segoe UI,Roboto,Arial,sans-serif;background:linear-gradient(180deg,#0b0712 0%, #1a1226 60%);color:var(--muted);}
+    header{padding:40px 6%;display:flex;align-items:center;justify-content:space-between;gap:20px}
+    h1{color:white;margin:0;font-weight:900;letter-spacing:0.6px}
+    p.lead{margin:6px 0 0;color:rgba(255,255,255,0.85)}
+
+    /* main hero */
+    .hero{min-height:70vh;display:grid;grid-template-columns:1fr 420px;gap:40px;align-items:center;padding:20px 6%;}
+    .hero .card{background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));padding:34px;border-radius:18px;box-shadow:0 10px 30px rgba(0,0,0,0.6);backdrop-filter:blur(6px)}
+    .intro h2{font-size:36px;margin:0;color:var(--accent)}
+    .intro p{line-height:1.6}
+
+    /* image */
+    .photo-wrap{display:flex;flex-direction:column;align-items:center;gap:16px}
+    .photo{width:320px;height:420px;border-radius:14px;overflow:hidden;border:6px solid rgba(255,255,255,0.03);box-shadow:0 20px 40px rgba(0,0,0,0.6);background:linear-gradient(135deg,#2b1231,#40163b)}
+    .photo img{width:100%;height:100%;object-fit:cover;display:block}
+    .caption{font-size:14px;color:rgba(255,255,255,0.6)}
+
+    /* music controls */
+    .music-controls{display:flex;gap:12px;align-items:center}
+    .btn{cursor:pointer;padding:12px 18px;border-radius:12px;border:0;background:linear-gradient(90deg,var(--accent),#ff8fb3);color:white;font-weight:700;box-shadow:0 8px 20px rgba(255,92,138,0.14)}
+    .btn.ghost{background:transparent;border:1px solid rgba(255,255,255,0.06);color:var(--muted);font-weight:600}
+
+    /* sections to make it "long" */
+    section{padding:60px 6%}
+    .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px}
+    .note{background:var(--card);padding:20px;border-radius:12px;min-height:140px}
+
+    /* flying hearts container (on top) */
+    .hearts{position:fixed;inset:0;pointer-events:none;z-index:50}
+
+    /* small footer */
+    footer{padding:30px 6%;text-align:center;color:rgba(255,255,255,0.45)}
+
+    /* responsive */
+    @media (max-width:900px){
+      .hero{grid-template-columns:1fr;min-height:unset}
+      .photo{width:100%;height:350px}
+      .grid{grid-template-columns:1fr}
+    }
+
+    /* heart styles & animation (each heart will have inline style to vary size/left/duration) */
+    .heart{
+      position:absolute;bottom:-40px;transform:translateY(0) scale(1);opacity:0;will-change:transform,opacity;pointer-events:none;
+      filter:drop-shadow(0 6px 12px rgba(255,92,138,0.12));
+    }
+    @keyframes floatUp{
+      0%{opacity:0;transform:translateY(0) scale(0.6)}
+      10%{opacity:1}
+      100%{opacity:0;transform:translateY(-120vh) scale(1.1)}
+    }
+
+    /* subtle floating background hearts */
+    .bg-heart{position:absolute;right:10%;top:10%;width:120px;height:120px;opacity:0.06;transform:rotate(-20deg)}
+
+    /* small sparkle */
+    .sparkle{width:10px;height:10px;border-radius:50%;background:rgba(255,255,255,0.9);box-shadow:0 0 12px rgba(255,255,255,0.06)}
+  </style>
+</head>
+<body>
+  <div class="hearts" id="hearts-container" aria-hidden="true"></div>
+
+  <header>
+    <div>
+      <h2>Just For You 💖</h2>
+      <p class="lead">A little site I made to make you smile Muuu 💖</p>
+    </div>
+    <div class="music-controls">
+      <button class="btn" id="play-btn">Play song</button>
+      <button class="btn ghost" id="surprise-btn">Send a heart</button>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="card intro">
+        <h2>Hey, Pondattiii💖 —</h2>
+        <p>Hi kutty mahh...Mama romba naal ahh idhu maari unakku Surprise pannanum nu wait pannittu irundhen Thangoo...Finally I got for you.</p>
+
+        <div style="margin-top:20px" class="grid">
+          <div class="note">
+            <h3 style="margin-top:0;color:var(--accent)">Memory</h3>
+            <p>I still remember our first Icecream date...your laugh made that tiny ibaco feel like the whole world.</p>
+          </div>
+          <div class="note">
+            <h3 style="margin-top:0;color:var(--accent)">Promise</h3>
+            <p>I promise to keep making you very happiest person I have ever meet dii Ammu And I promise I'll Never leave you Pondatiii.</p>
+          </div>
+          <div class="note">
+            <h3 style="margin-top:0;color:var(--accent)">Why you</h3>
+            <p>Un Character,Un Azhagu....Nee enna paatha Andha paarvai...adhula Dhan Mama gaali...indha Love Mama ku life long venum Papa Adhan. </p>
+          </div>
+        </div>
+      </div>
+
+      <aside class="photo-wrap">
+        <div class="photo card">
+          <!-- Replace 'girlfriend.jpg' with your girlfriend's image file in the same folder -->
+          <img id="gf-img" src="muuu.jpg" alt="Her photo — replace with your image">
+        </div>
+        
+      </aside>
+    </section>
+
+    
+
+    <section style="background:linear-gradient(180deg, rgba(255,92,138,0.03), transparent);">
+      <h2 style="color:var(--accent)">Love Notes</h2>
+      <p>Scrolling love notes — keep reading Muuu :)</p>
+      <div style="height:220px;overflow:auto;margin-top:18px;padding-right:10px">
+        <p class="note">Indha Bundle ahh nyabagam irukkaa diii Kundamma.</p>
+        <p class="note">Naan Un Azhaginiley Dheivam Unarugiren. Undhan Aruginiley Ennai Unarugiren</p>
+        <p class="note">Uyire Un Uyirena Naan Iruppen. Inimel Un Idhalinil Naan Sirippen</p>
+        <p class="note">Love You Diiii Chinukkuu.....</p>
+      </div>
+    </section>
+
+    <section>
+      <h2 style="color:var(--accent)">More</h2>
+      <p>Want fireworks? Keep clicking the "Send a heart" button to send extra animated hearts.</p>
+      <div style="height:240px;border-radius:12px;background:var(--card);display:flex;align-items:center;justify-content:center;flex-direction:column;gap:12px;padding:20px">
+        <div style="font-size:20px">How cute is this? ❤️</div>
+        <div style="display:flex;gap:12px">
+          <button class="btn" onclick="createHeartAtCenter()">Surprise heart</button>
+          <button class="btn ghost" onclick="clearHearts()">Clear hearts</button>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer>
+    Made with care ·  Built by someone who always loves you
+  </footer>
+
+  <!-- Hidden audio — replace 'song.mp3' with your file. Browsers may block autoplay; user gesture (click) required to play. -->
+  <audio id="love-audio" src="song.mp3" preload="none"></audio>
+
+  <script>
+    const audio = document.getElementById('love-audio');
+    const playBtn = document.getElementById('play-btn');
+    const surpriseBtn = document.getElementById('surprise-btn');
+    const heartsContainer = document.getElementById('hearts-container');
+
+    // Toggle play/pause
+    playBtn.addEventListener('click', async ()=>{
+      try{
+        if(audio.paused){
+          await audio.play();
+          playBtn.textContent = 'Pause song';
+        } else {
+          audio.pause();
+          playBtn.textContent = 'Play song';
+        }
+      }catch(e){
+        alert('Browser blocked playback — try clicking the play button again or allow audio in your browser.');
+      }
+    });
+
+    // send a heart when the ghost button is clicked
+    surpriseBtn.addEventListener('click', ()=>{
+      createRandomHeart();
+    });
+
+    // Create hearts at random positions with random sizes and speed
+    function createRandomHeart(){
+      const heart = document.createElement('div');
+      heart.className = 'heart';
+      const size = Math.floor(Math.random()*40) + 24; // 24px - 64px
+      const left = Math.random()*100; // vw
+      const dur = Math.random()*4 + 6; // 6s - 10s
+      heart.style.left = left + 'vw';
+      heart.style.width = size + 'px';
+      heart.style.height = size + 'px';
+      heart.style.animation = `floatUp ${dur}s linear forwards`;
+      heart.style.zIndex = 100 + Math.floor(Math.random()*50);
+
+      // set inner SVG heart for crispness
+      heart.innerHTML = `
+        <svg viewBox="0 0 32 29.6" style="width:100%;height:100%;display:block">
+          <path fill="url(#g)" d="M23.6,0c-2.7,0-5.1,1.6-6.6,4C15.5,1.6,13.1,0,10.4,0C4.9,0,0,4.9,0,10.4
+          c0,6.9,6.4,11.9,16,19.2c9.6-7.3,16-12.3,16-19.2C32,4.9,27.1,0,23.6,0z" />
+          <defs>
+            <linearGradient id="g" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stop-color="#ff8fb3" />
+              <stop offset="100%" stop-color="#ff5c8a" />
+            </linearGradient>
+          </defs>
+        </svg>
+      `;
+
+      heartsContainer.appendChild(heart);
+
+      // remove after animation
+      setTimeout(()=>heart.remove(), (dur*1000)+500);
+    }
+
+    // create a heart at center for the Surpise heart button
+    function createHeartAtCenter(){
+      const heart = document.createElement('div');
+      heart.className = 'heart';
+      const size = 120;
+      heart.style.left = '50vw';
+      heart.style.width = size + 'px';
+      heart.style.height = size + 'px';
+      heart.style.marginLeft = -(size/2) + 'px';
+      heart.style.animation = `floatUp 7s linear forwards`;
+      heart.innerHTML = `
+        <svg viewBox="0 0 32 29.6" style="width:100%;height:100%;display:block">
+          <path fill="#ff5c8a" d="M23.6,0c-2.7,0-5.1,1.6-6.6,4C15.5,1.6,13.1,0,10.4,0C4.9,0,0,4.9,0,10.4
+          c0,6.9,6.4,11.9,16,19.2c9.6-7.3,16-12.3,16-19.2C32,4.9,27.1,0,23.6,0z" />
+        </svg>
+      `;
+      heartsContainer.appendChild(heart);
+      setTimeout(()=>heart.remove(), 8000);
+    }
+
+    function clearHearts(){
+      heartsContainer.innerHTML = '';
+    }
+
+    // gentle auto-hearts every few seconds for atmosphere
+    let autoHeartTimer = setInterval(()=>{
+      if(document.visibilityState === 'visible') createRandomHeart();
+    }, 1400);
+
+    // accessibility: keyboard shortcut P to play/pause and H to send a heart
+    window.addEventListener('keydown', (e)=>{
+      if(e.key.toLowerCase() === 'p') playBtn.click();
+      if(e.key.toLowerCase() === 'h') surpriseBtn.click();
+    });
+
+    // If desired, you can programmatically replace the placeholder image with a URL
+    // Example:
+    // document.getElementById('gf-img').src = 'https://example.com/your-photo.jpg';
+
+    // NOTE: Replace 'girlfriend.jpg' and 'song.mp3' with your actual files in the same folder as this HTML file.
+  </script>
+</body>
+</html>
